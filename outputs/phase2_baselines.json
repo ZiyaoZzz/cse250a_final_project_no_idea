@@ -1,0 +1,20 @@
+{
+  "environment": "Blackjack-v1 (natural=False, sab=False)",
+  "training_seed": 42,
+  "policy_iteration_iterations": 3,
+  "policy_iteration": {
+    "episodes": 10000,
+    "mean_return": -0.053,
+    "win_rate": 0.4279,
+    "draw_rate": 0.0912,
+    "loss_rate": 0.4809
+  },
+  "q_learning": {
+    "episodes": 10000,
+    "mean_return": -0.0765,
+    "win_rate": 0.4136,
+    "draw_rate": 0.0963,
+    "loss_rate": 0.4901
+  },
+  "q_learning_training_episodes": 100000
+}

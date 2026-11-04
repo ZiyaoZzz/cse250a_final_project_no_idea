@@ -46,11 +46,29 @@ Build the Blackjack transition and reward models, averaging over the hidden
 dealer card. Add policy iteration as the known-model reference and tabular
 Q-learning with epsilon-greedy exploration and a configurable learning rate.
 
+Run policy iteration, train Q-learning, and compare both policies in the
+configured environment:
+
+```powershell
+python traditional_baselines.py --q-episodes 100000 --eval-episodes 10000
+```
+
+The results are saved to `outputs/phase2_baselines.json`.
+
 ### `sft_data_generator.py`
 
 Generate state/action examples labeled by policy iteration. Include only the
 player total, dealer up-card, and usable-ace status—never hidden cards or future
 outcomes.
+
+The generator samples hands from `Blackjack-v1` and writes one JSONL record per
+decision:
+
+```powershell
+python sft_data_generator.py --episodes 100000
+```
+
+The default output is `outputs/expert_blackjack.jsonl`.
 
 ## Phase 3: LLM training pipelines
 
@@ -85,8 +103,6 @@ Plot policy-disagreement heatmaps against policy iteration.
 
 ## Implementation status
 
-Phase 1 is implemented. Phase 2–4 modules currently exist as placeholders:
-`traditional_baselines.py`, `sft_data_generator.py`, `llm_prompts.py`,
-`train_sft.py`, `train_rl.py`, `evaluate.py`, and `metrics_and_plots.py`.
-The specifications above describe their intended implementation; the modules
-do not yet provide those features.
+Phase 1 and Phase 2 are implemented. Phase 3–4 modules are still placeholders:
+`llm_prompts.py`, `train_sft.py`, `train_rl.py`, `evaluate.py`, and
+`metrics_and_plots.py`.

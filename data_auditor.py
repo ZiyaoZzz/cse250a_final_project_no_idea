@@ -35,6 +35,13 @@ OUTCOME_FIELDS = {
     "winner",
     "final_result",
     "game_result",
+    "winloss",
+}
+ACTION_HISTORY_FIELDS = {
+    "actions_taken",
+    "action_history",
+    "player_actions",
+    "actions",
 }
 HIDDEN_CARD_FIELDS = {
     "dealer_hole_card",
@@ -52,6 +59,7 @@ class AuditReport:
     mapped_fields: dict[str, str]
     missing_fields: list[str]
     outcome_only: bool
+    action_history_columns: list[str]
     hidden_card_columns: list[str]
     rows_inspected: int
     row_width_errors: int
@@ -81,13 +89,9 @@ def audit_csv(path: Path, *, row_limit: int | None = 1_000) -> AuditReport:
         }
         missing = [field for field in FIELD_ALIASES if field not in mapped]
         hidden = sorted(name for name in normalized if name in HIDDEN_CARD_FIELDS)
+        action_history = sorted(name for name in normalized if name in ACTION_HISTORY_FIELDS)
         has_outcome = bool(OUTCOME_FIELDS.intersection(normalized))
-        outcome_only = has_outcome and not {
-            "action",
-            "player_action",
-            "decision",
-            "move",
-        }.intersection(normalized)
+        outcome_only = has_outcome and not action_history and "action" not in mapped
         row_errors = 0
         rows_inspected = 0
         scan_complete = True
@@ -104,6 +108,12 @@ def audit_csv(path: Path, *, row_limit: int | None = 1_000) -> AuditReport:
         status = "outcome_only"
         notes = [
             "Outcome records do not contain decision transitions and must not be used as transition data."
+        ]
+    elif action_history and missing:
+        status = "terminal_with_action_history"
+        notes = [
+            "Action history is present, but per-decision state transitions are not; "
+            "the data is not directly compatible as transition data."
         ]
     elif missing:
         status = "incomplete_schema"
@@ -128,6 +138,7 @@ def audit_csv(path: Path, *, row_limit: int | None = 1_000) -> AuditReport:
         mapped_fields=mapped,
         missing_fields=missing,
         outcome_only=outcome_only,
+        action_history_columns=action_history,
         hidden_card_columns=hidden,
         rows_inspected=rows_inspected,
         row_width_errors=row_errors,

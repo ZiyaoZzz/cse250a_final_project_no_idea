@@ -13,11 +13,20 @@ class AuditCsvTests(unittest.TestCase):
             return audit_csv(path)
 
     def test_outcome_only_data_is_not_transition_data(self):
-        report = self.audit_text("game_id,result\n1,win\n")
+        report = self.audit_text("game_id,winloss\n1,Win\n")
 
         self.assertEqual(report.status, "outcome_only")
         self.assertTrue(report.outcome_only)
         self.assertIn("must not be used as transition data", report.notes[0])
+
+    def test_terminal_action_history_is_not_mislabeled_as_outcome_only(self):
+        report = self.audit_text(
+            'initial_hand,actions_taken,win\n"[10, 7]","[\'S\']",1\n'
+        )
+
+        self.assertEqual(report.status, "terminal_with_action_history")
+        self.assertFalse(report.outcome_only)
+        self.assertEqual(report.action_history_columns, ["actions_taken"])
 
     def test_transition_schema_is_detected_and_hidden_card_is_flagged(self):
         report = self.audit_text(
