@@ -1,0 +1,806 @@
+{
+ "settings": {
+  "num_decks": 1,
+  "penetration": 0.75,
+  "train_hands": 30000000,
+  "eval_hands": 10000000,
+  "curve_hands": 1000000,
+  "train_seeds": 5,
+  "eval_seeds": "2000000 + training seed",
+  "epsilon": 0.3,
+  "alpha_power": 0.85,
+  "seconds": 930.6
+ },
+ "stages": [
+  {
+   "name": "baseline",
+   "label": "Baseline: total, upcard, usable ace",
+   "use_num_cards": false,
+   "use_count": false,
+   "allow_double": false,
+   "bust_penalty": 0.0
+  },
+  {
+   "name": "count",
+   "label": "+ Hi-Lo true count",
+   "use_num_cards": false,
+   "use_count": true,
+   "allow_double": false,
+   "bust_penalty": 0.0
+  }
+ ],
+ "references": [
+  {
+   "policy": "random",
+   "seed": 0,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.3925895,
+    "ci95": 0.0005558375693753731,
+    "win_rate": 0.2828866,
+    "draw_rate": 0.0416373,
+    "loss_rate": 0.6754761,
+    "bust_rate": 0.31158,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "random",
+   "seed": 1,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.3929241,
+    "ci95": 0.0005557851673510426,
+    "win_rate": 0.2827749,
+    "draw_rate": 0.0415261,
+    "loss_rate": 0.675699,
+    "bust_rate": 0.3115598,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "random",
+   "seed": 2,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.3924723,
+    "ci95": 0.000555897629149986,
+    "win_rate": 0.2829861,
+    "draw_rate": 0.0415555,
+    "loss_rate": 0.6754584,
+    "bust_rate": 0.3114946,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "random",
+   "seed": 3,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.3925253,
+    "ci95": 0.0005558654921283272,
+    "win_rate": 0.2829339,
+    "draw_rate": 0.0416069,
+    "loss_rate": 0.6754591999999999,
+    "bust_rate": 0.3114126,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "random",
+   "seed": 4,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.3928817,
+    "ci95": 0.0005557515456157627,
+    "win_rate": 0.2827308,
+    "draw_rate": 0.0416567,
+    "loss_rate": 0.6756125,
+    "bust_rate": 0.3117252,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "hit_below_17",
+   "seed": 0,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0798214,
+    "ci95": 0.0005852206957162109,
+    "win_rate": 0.409031,
+    "draw_rate": 0.1021166,
+    "loss_rate": 0.48885239999999996,
+    "bust_rate": 0.2833129,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "hit_below_17",
+   "seed": 1,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0795248,
+    "ci95": 0.000585136423619721,
+    "win_rate": 0.4090273,
+    "draw_rate": 0.1024206,
+    "loss_rate": 0.48855210000000004,
+    "bust_rate": 0.2832184,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "hit_below_17",
+   "seed": 2,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0800463,
+    "ci95": 0.0005851415063506077,
+    "win_rate": 0.4088159,
+    "draw_rate": 0.1023219,
+    "loss_rate": 0.4888622,
+    "bust_rate": 0.2832862,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "hit_below_17",
+   "seed": 3,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.079754,
+    "ci95": 0.0005851854293862519,
+    "win_rate": 0.4090056,
+    "draw_rate": 0.1022348,
+    "loss_rate": 0.48875959999999996,
+    "bust_rate": 0.283166,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "hit_below_17",
+   "seed": 4,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0799136,
+    "ci95": 0.0005851428609829549,
+    "win_rate": 0.4088737,
+    "draw_rate": 0.102339,
+    "loss_rate": 0.48878730000000004,
+    "bust_rate": 0.2835268,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy",
+   "seed": 0,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0437803,
+    "ci95": 0.0005899664060835519,
+    "win_rate": 0.432083,
+    "draw_rate": 0.0920537,
+    "loss_rate": 0.4758633,
+    "bust_rate": 0.1836228,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy",
+   "seed": 1,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0432599,
+    "ci95": 0.0005898933730483431,
+    "win_rate": 0.4322084,
+    "draw_rate": 0.0923233,
+    "loss_rate": 0.47546829999999995,
+    "bust_rate": 0.183436,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy",
+   "seed": 2,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0437661,
+    "ci95": 0.000589908073692991,
+    "win_rate": 0.4319999,
+    "draw_rate": 0.0922341,
+    "loss_rate": 0.475766,
+    "bust_rate": 0.1833682,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy",
+   "seed": 3,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0435052,
+    "ci95": 0.0005899532240170478,
+    "win_rate": 0.4321883,
+    "draw_rate": 0.0921182,
+    "loss_rate": 0.4756935,
+    "bust_rate": 0.183292,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy",
+   "seed": 4,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0432992,
+    "ci95": 0.0005899410084906781,
+    "win_rate": 0.4322636,
+    "draw_rate": 0.0921736,
+    "loss_rate": 0.47556279999999995,
+    "bust_rate": 0.183476,
+    "double_rate": 0.0
+   }
+  },
+  {
+   "policy": "basic_strategy_double",
+   "seed": 0,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0289872,
+    "ci95": 0.0006592423959345279,
+    "win_rate": 0.4315944,
+    "draw_rate": 0.0912537,
+    "loss_rate": 0.47715189999999996,
+    "bust_rate": 0.1787763,
+    "double_rate": 0.0800669
+   }
+  },
+  {
+   "policy": "basic_strategy_double",
+   "seed": 1,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0285089,
+    "ci95": 0.0006590836996833823,
+    "win_rate": 0.4317476,
+    "draw_rate": 0.0915102,
+    "loss_rate": 0.4767422,
+    "bust_rate": 0.1786248,
+    "double_rate": 0.0799448
+   }
+  },
+  {
+   "policy": "basic_strategy_double",
+   "seed": 2,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0290411,
+    "ci95": 0.0006591886579996912,
+    "win_rate": 0.4314821,
+    "draw_rate": 0.0914452,
+    "loss_rate": 0.4770727,
+    "bust_rate": 0.1785329,
+    "double_rate": 0.080094
+   }
+  },
+  {
+   "policy": "basic_strategy_double",
+   "seed": 3,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0289355,
+    "ci95": 0.0006590577889230013,
+    "win_rate": 0.4316768,
+    "draw_rate": 0.0913154,
+    "loss_rate": 0.4770078,
+    "bust_rate": 0.1784363,
+    "double_rate": 0.0798828
+   }
+  },
+  {
+   "policy": "basic_strategy_double",
+   "seed": 4,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0286168,
+    "ci95": 0.0006591127656376751,
+    "win_rate": 0.4317483,
+    "draw_rate": 0.0913371,
+    "loss_rate": 0.47691459999999997,
+    "bust_rate": 0.1786744,
+    "double_rate": 0.0799841
+   }
+  }
+ ],
+ "runs": [
+  {
+   "stage": "baseline",
+   "seed": 0,
+   "states": 280,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0437803,
+    "ci95": 0.0005899664060835519,
+    "win_rate": 0.432083,
+    "draw_rate": 0.0920537,
+    "loss_rate": 0.4758633,
+    "bust_rate": 0.1836228,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.074359
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.05222
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.044798
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.043568
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.043559
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.042692
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.042802
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.042802
+    }
+   ]
+  },
+  {
+   "stage": "baseline",
+   "seed": 1,
+   "states": 280,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0432599,
+    "ci95": 0.0005898933730483431,
+    "win_rate": 0.4322084,
+    "draw_rate": 0.0923233,
+    "loss_rate": 0.47546829999999995,
+    "bust_rate": 0.183436,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.059024
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.055015
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.045313
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.042274
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.043775
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.042187
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.042187
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.042187
+    }
+   ]
+  },
+  {
+   "stage": "baseline",
+   "seed": 2,
+   "states": 280,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0437661,
+    "ci95": 0.000589908073692991,
+    "win_rate": 0.4319999,
+    "draw_rate": 0.0922341,
+    "loss_rate": 0.475766,
+    "bust_rate": 0.1833682,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.061229
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.054155
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.047611
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.046196
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.0443
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.043944
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.044174
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.044174
+    }
+   ]
+  },
+  {
+   "stage": "baseline",
+   "seed": 3,
+   "states": 280,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0435052,
+    "ci95": 0.0005899532240170478,
+    "win_rate": 0.4321883,
+    "draw_rate": 0.0921182,
+    "loss_rate": 0.4756935,
+    "bust_rate": 0.183292,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.065957
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.050512
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.046439
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.045895
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.045626
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.044423
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.044481
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.044481
+    }
+   ]
+  },
+  {
+   "stage": "baseline",
+   "seed": 4,
+   "states": 280,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0432992,
+    "ci95": 0.0005899410084906781,
+    "win_rate": 0.4322636,
+    "draw_rate": 0.0921736,
+    "loss_rate": 0.47556279999999995,
+    "bust_rate": 0.183476,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.06522
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.050612
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.046594
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.043533
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.04335
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.043089
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.042847
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.042847
+    }
+   ]
+  },
+  {
+   "stage": "count",
+   "seed": 0,
+   "states": 1400,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0413728,
+    "ci95": 0.0005903210836823184,
+    "win_rate": 0.4337291,
+    "draw_rate": 0.091169,
+    "loss_rate": 0.47510189999999997,
+    "bust_rate": 0.1748991,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.082846
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.067777
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.051783
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.044844
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.041927
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.040119
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.040037
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.04033
+    }
+   ]
+  },
+  {
+   "stage": "count",
+   "seed": 1,
+   "states": 1400,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0408393,
+    "ci95": 0.000590144947551323,
+    "win_rate": 0.4337033,
+    "draw_rate": 0.0917541,
+    "loss_rate": 0.47454260000000004,
+    "bust_rate": 0.177063,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.083345
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.062901
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.051611
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.045127
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.04256
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.040676
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.039857
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.040102
+    }
+   ]
+  },
+  {
+   "stage": "count",
+   "seed": 2,
+   "states": 1400,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0414383,
+    "ci95": 0.0005902555727441167,
+    "win_rate": 0.4335984,
+    "draw_rate": 0.0913649,
+    "loss_rate": 0.4750367,
+    "bust_rate": 0.1737233,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.090177
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.070298
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.053976
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.045976
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.043757
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.042117
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.0423
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.041601
+    }
+   ]
+  },
+  {
+   "stage": "count",
+   "seed": 3,
+   "states": 1400,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0410801,
+    "ci95": 0.0005901702282338575,
+    "win_rate": 0.4336316,
+    "draw_rate": 0.0916567,
+    "loss_rate": 0.47471169999999996,
+    "bust_rate": 0.1772499,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.091967
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.068983
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.052768
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.046067
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.043246
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.041439
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.041457
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.041252
+    }
+   ]
+  },
+  {
+   "stage": "count",
+   "seed": 4,
+   "states": 1400,
+   "final": {
+    "hands": 10000000,
+    "mean_return": -0.0409376,
+    "ci95": 0.0005901361144076207,
+    "win_rate": 0.4336446,
+    "draw_rate": 0.0917732,
+    "loss_rate": 0.47458219999999995,
+    "bust_rate": 0.1782909,
+    "double_rate": 0.0
+   },
+   "curve": [
+    {
+     "train_hands": 10000,
+     "mean_return": -0.09553
+    },
+    {
+     "train_hands": 30000,
+     "mean_return": -0.063791
+    },
+    {
+     "train_hands": 100000,
+     "mean_return": -0.054371
+    },
+    {
+     "train_hands": 300000,
+     "mean_return": -0.044955
+    },
+    {
+     "train_hands": 1000000,
+     "mean_return": -0.043572
+    },
+    {
+     "train_hands": 3000000,
+     "mean_return": -0.042359
+    },
+    {
+     "train_hands": 10000000,
+     "mean_return": -0.040704
+    },
+    {
+     "train_hands": 30000000,
+     "mean_return": -0.04053
+    }
+   ]
+  }
+ ]
+}

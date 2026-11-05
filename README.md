@@ -1,108 +1,66 @@
-# Blackjack LLM Project
+# Blackjack Q-Table Project
 
-## Phase 1: Environment and data audit
+CSE 250A final project. We train a tabular Q-learning agent, start from a small
+observation, make 2–3 intuitive changes, and show how performance moves after each one.
 
-Install the Phase 1 dependency:
+## Results so far
+
+6-deck shoe, 5 seeds, 30M training hands and 10M evaluation hands per seed. Scored on
+the true reward. Full table: [outputs/q_table_results.md](outputs/q_table_results.md).
+
+| Policy | Mean return / hand | Change vs baseline |
+|---|---:|---:|
+| Random play | -0.3953 | -0.3495 |
+| **Baseline Q-table** (total, upcard, usable ace) | -0.0458 ± 0.0005 | — |
+| + Hi-Lo true count | -0.0455 ± 0.0004 | +0.0003 ± 0.0002 |
+| + double down | -0.0332 ± 0.0005 | +0.0126 ± 0.0004 |
+| + count + double down | -0.0329 ± 0.0004 | +0.0129 ± 0.0002 |
+| + double, bust penalty 0.1 | -0.0361 ± 0.0009 | +0.0097 ± 0.0008 |
+| Basic strategy + double | -0.0329 ± 0.0004 | +0.0129 ± 0.0003 |
+
+- **Observation:** the count adds +0.0003 on 6 decks, +0.0011 on 2 decks, and +0.0024 on
+  1 deck. The number of cards adds nothing.
+- **Action:** double down is the largest gain and removes about 28% of the house edge.
+- **Reward:** a bust penalty cuts busts from 17.7% to 11.7% but lowers return, and larger
+  penalties do worse.
+
+![Learning curves](outputs/learning_curves.png)
+
+## Team TODO
+
+| Who | Owns | To do |
+|---|---|---|
+| Ziyao | Environment and baseline | Merge everyone's work, keep experiment settings consistent, write the methods section |
+| Member A | Observation | Find which states change their decision with the count (for example 16 vs 10); compare count buckets of ±2 and ±3; write the observation bullet |
+| Member B | Action | Plot where the Q-table doubles against basic strategy and explain the differences; write the action bullet |
+| Member C | Reward | Explain why the bust penalty hurts; try potential-based shaping and check whether it learns faster; write the reward bullet |
+| Member D | Reproduction and report | Rerun everything from a clean clone with new seeds; confirm the conclusions hold; finalize the table and figures; assemble the report |
+
+## Setup notes
+
+`Blackjack-v1` deals from an infinite deck and has no double down, so `blackjack_shoe.py`
+keeps its rules and adds a 6-deck shoe and an optional double. All stages run there. With
+`num_decks=None` it matches Blackjack-v1 and the exact policy-iteration value.
+
+Compare stages with the same settings: fixed evaluation seeds, 5 training seeds, and
+millions of evaluation hands. At 50,000 hands the 95% interval is about ±0.009, which
+hides the count effect.
+
+## Running it
 
 ```powershell
 python -m pip install -r requirements.txt
-```
-
-Create the configured Gymnasium environment (`Blackjack-v1`, `natural=False`,
-`sab=False`):
-
-```python
-from env_setup import make_blackjack_env
-
-with make_blackjack_env(seed=42) as env:
-    observation, info = env.reset()
-    observation, reward, terminated, truncated, info = env.step(1)  # hit
-```
-
-Audit one or more local candidate CSV datasets:
-
-```powershell
-python data_auditor.py .\data\candidate_900k.csv .\data\candidate_50m.csv
-```
-
-The auditor reads only the header and up to 1,000 records by default. Pass
-`--row-limit 0` to scan each file fully. Its `transition_candidate` status means
-the expected columns were found, not that their values or semantics have been
-fully verified. `outcome_only` datasets are explicitly unsuitable as transition
-data. Inspect `hidden_card_columns` and exclude those fields from decision-time
-observations.
-
-Run Phase 1 checks:
-
-```powershell
 python -m unittest discover -s tests
+python q_table.py                 # Full ladder: about 25 minutes on 14 CPU workers
+python metrics_and_plots.py       # Writes the results table and learning curves
 ```
 
-## Phase 2: Traditional baselines and expert data
+Options: `--decks 2`, `--stages baseline count`, and `--hands 1000000` for a quick run.
 
-### `traditional_baselines.py`
-
-Build the Blackjack transition and reward models, averaging over the hidden
-dealer card. Add policy iteration as the known-model reference and tabular
-Q-learning with epsilon-greedy exploration and a configurable learning rate.
-
-Run policy iteration, train Q-learning, and compare both policies in the
-configured environment:
-
-```powershell
-python traditional_baselines.py --q-episodes 100000 --eval-episodes 10000
-```
-
-The results are saved to `outputs/phase2_baselines.json`.
-
-### `sft_data_generator.py`
-
-Generate state/action examples labeled by policy iteration. Include only the
-player total, dealer up-card, and usable-ace status—never hidden cards or future
-outcomes.
-
-The generator samples hands from `Blackjack-v1` and writes one JSONL record per
-decision:
-
-```powershell
-python sft_data_generator.py --episodes 100000
-```
-
-The default output is `outputs/expert_blackjack.jsonl`.
-
-## Phase 3: LLM training pipelines
-
-### `llm_prompts.py`
-
-Use one fixed prompt containing only the current game state. Accept only `Hit`
-or `Stick` as a model response.
-
-### `train_sft.py`
-
-Fine-tune a small open-source language model with LoRA on the generated
-examples. Save the adapter and training settings.
-
-### `train_rl.py`
-
-Use REINFORCE on new Blackjack games to improve expected reward. Include a
-state-independent running-return baseline and save training results.
-
-## Phase 4: Evaluation, ablation, and visualization
-
-### `evaluate.py`
-
-Compare each frozen policy across three training seeds and 100,000 fresh games
-per seed. Include policy iteration, Q-learning, SFT/RL models, the “hit below
-17” rule, and the base LLM.
-
-### `metrics_and_plots.py`
-
-Report average return with 95% confidence intervals, win/draw/loss rates,
-return gap from policy iteration, inference latency, and training interactions.
-Plot policy-disagreement heatmaps against policy iteration.
-
-## Implementation status
-
-Phase 1 and Phase 2 are implemented. Phase 3–4 modules are still placeholders:
-`llm_prompts.py`, `train_sft.py`, `train_rl.py`, `evaluate.py`, and
-`metrics_and_plots.py`.
+| File | Purpose |
+|---|---|
+| `blackjack_shoe.py` | Shoe environment, Hi-Lo count, double down |
+| `q_table.py` | Stage definitions, Q-learning, experiment runner |
+| `evaluate.py` | Shared evaluation and reference policies |
+| `metrics_and_plots.py` | Results table and learning curves |
+| `traditional_baselines.py` | Exact model and policy iteration, used for basic strategy |

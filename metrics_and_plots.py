@@ -1,11 +1,133 @@
-"""Phase 4 placeholder: evaluation metrics and policy-disagreement visualizations."""
+"""Turn a q_table.py report into the results table and the learning-curve figure."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import statistics
+from collections import defaultdict
+from pathlib import Path
+
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+T_95 = {2: 12.71, 3: 4.30, 4: 3.18, 5: 2.78, 6: 2.57, 7: 2.45, 8: 2.36, 9: 2.31, 10: 2.26}
+INK, MUTED, GRID = "#0b0b0b", "#52514e", "#e6e5e0"
+CURVE_SERIES = {
+    "baseline": ("#2a78d6", "Baseline"),
+    "count": ("#eb6834", "+ count"),
+    "double": ("#1baf7a", "+ double"),
+    "count_double": ("#eda100", "+ count + double"),
+}
+REFERENCE_LINES = {
+    "basic_strategy": "Basic strategy, hit/stand",
+    "basic_strategy_double": "Basic strategy + double",
+}
+
+
+def mean_ci(values: list[float]) -> tuple[float, float]:
+    """Mean and 95% t-interval half-width across seeds."""
+    if len(values) < 2:
+        return values[0], float("nan")
+    half_width = T_95[len(values)] * statistics.stdev(values) / len(values) ** 0.5
+    return statistics.fmean(values), half_width
+
+
+def _finals_by_seed(rows: list[dict], key: str) -> dict[str, dict[int, dict]]:
+    grouped: dict[str, dict[int, dict]] = defaultdict(dict)
+    for row in rows:
+        grouped[row[key]][row["seed"]] = row["final"]
+    return grouped
+
+
+def results_table(report: dict) -> str:
+    """Markdown table; deltas are paired by seed, so both sides saw the same eval shoe."""
+    stages = _finals_by_seed(report["runs"], "stage")
+    references = _finals_by_seed(report["references"], "policy")
+    states = {row["stage"]: row["states"] for row in report["runs"]}
+    baseline = stages["baseline"]
+
+    def row(label: str, finals: dict[int, dict], table_size: str) -> str:
+        mean, half_width = mean_ci([final["mean_return"] for final in finals.values()])
+        delta, delta_width = mean_ci(
+            [finals[seed]["mean_return"] - baseline[seed]["mean_return"] for seed in finals]
+        )
+        win = statistics.fmean(final["win_rate"] for final in finals.values())
+        bust = statistics.fmean(final["bust_rate"] for final in finals.values())
+        double = statistics.fmean(final["double_rate"] for final in finals.values())
+        return (
+            f"| {label} | {table_size} | {mean:+.4f} ± {half_width:.4f} "
+            f"| {delta:+.4f} ± {delta_width:.4f} | {win:.1%} | {bust:.1%} | {double:.1%} |"
+        )
+
+    lines = [
+        "| Policy | Table states | Mean return / hand | Change vs baseline | Win | Bust | Double |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for stage in report["stages"]:
+        lines.append(row(stage["label"], stages[stage["name"]], f"{states[stage['name']]:,}"))
+    for name, finals in references.items():
+        lines.append(row(f"*Reference: {name.replace('_', ' ')}*", finals, "—"))
+    return "\n".join(lines) + "\n"
+
+
+def learning_curve(report: dict, path: Path) -> None:
+    labels = {stage["name"]: stage["label"] for stage in report["stages"]}
+    curves: dict[str, dict[int, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for run in report["runs"]:
+        for point in run["curve"]:
+            curves[run["stage"]][point["train_hands"]].append(point["mean_return"])
+    references = _finals_by_seed(report["references"], "policy")
+
+    figure, axes = plt.subplots(figsize=(7.2, 4.2), dpi=200)
+    for name, (color, short_label) in CURVE_SERIES.items():
+        if name not in curves:
+            continue
+        budgets = sorted(curves[name])
+        means = [statistics.fmean(curves[name][budget]) for budget in budgets]
+        axes.plot(budgets, means, color=color, linewidth=2, marker="o", markersize=5,
+                  label=labels[name])
+        axes.annotate(short_label, (budgets[0], means[0]), xytext=(4, -11),
+                      textcoords="offset points", fontsize=8, color=INK)
+    for name, label in REFERENCE_LINES.items():
+        level = statistics.fmean(final["mean_return"] for final in references[name].values())
+        axes.axhline(level, color=MUTED, linewidth=1, linestyle="--")
+        axes.annotate(label, (0.01, level), xycoords=("axes fraction", "data"),
+                      xytext=(0, 3), textcoords="offset points", fontsize=8, color=MUTED)
+    axes.set_xscale("log")
+    axes.set_xlabel("Training hands", color=INK)
+    axes.set_ylabel("Mean return per hand (true reward)", color=INK)
+    axes.set_title("Learning curves, mean of training seeds", loc="left", fontsize=11, color=INK)
+    axes.grid(axis="y", color=GRID, linewidth=0.8)
+    axes.tick_params(colors=MUTED, labelsize=8)
+    for side in ("top", "right", "left"):
+        axes.spines[side].set_visible(False)
+    axes.spines["bottom"].set_color(MUTED)
+    axes.legend(frameon=False, fontsize=8, loc="lower right")
+    figure.tight_layout()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    figure.savefig(path)
+    plt.close(figure)
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--input", type=Path, default=Path("outputs/q_table_ladder.json"))
+    parser.add_argument("--table", type=Path, default=Path("outputs/q_table_results.md"))
+    parser.add_argument("--figure", type=Path, default=Path("outputs/learning_curves.png"))
+    return parser.parse_args()
 
 
 def main() -> None:
-    raise NotImplementedError(
-        "Phase 4: compute confidence intervals, policy gaps, latency, interactions, "
-        "and disagreement heatmaps."
-    )
+    args = _parse_args()
+    report = json.loads(args.input.read_text(encoding="utf-8"))
+    table = results_table(report)
+    args.table.parent.mkdir(parents=True, exist_ok=True)
+    args.table.write_text(table, encoding="utf-8")
+    learning_curve(report, args.figure)
+    print(table)
 
 
 if __name__ == "__main__":
