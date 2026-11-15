@@ -21,6 +21,12 @@ CURVE_SERIES = {
     "double": ("#1baf7a", "+ double"),
     "count_double": ("#eda100", "+ count + double"),
 }
+SHAPING_SERIES = {
+    "double": ("#1baf7a", "no shaping"),
+    "bust_0.1": ("#e45756", "bust penalty"),
+    "shaped_heuristic": ("#7a5cd6", "total/21"),
+    "shaped_value": ("#eda100", "BS value"),
+}
 REFERENCE_LINES = {
     "basic_strategy": "Basic strategy, hit/stand",
     "basic_strategy_double": "Basic strategy + double",
@@ -73,7 +79,7 @@ def results_table(report: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
-def learning_curve(report: dict, path: Path) -> None:
+def learning_curve(report: dict, path: Path, series: dict = CURVE_SERIES) -> None:
     labels = {stage["name"]: stage["label"] for stage in report["stages"]}
     curves: dict[str, dict[int, list[float]]] = defaultdict(lambda: defaultdict(list))
     for run in report["runs"]:
@@ -82,15 +88,16 @@ def learning_curve(report: dict, path: Path) -> None:
     references = _finals_by_seed(report["references"], "policy")
 
     figure, axes = plt.subplots(figsize=(7.2, 4.2), dpi=200)
-    for name, (color, short_label) in CURVE_SERIES.items():
+    for name, (color, short_label) in series.items():
         if name not in curves:
             continue
         budgets = sorted(curves[name])
         means = [statistics.fmean(curves[name][budget]) for budget in budgets]
         axes.plot(budgets, means, color=color, linewidth=2, marker="o", markersize=5,
                   label=labels[name])
-        axes.annotate(short_label, (budgets[0], means[0]), xytext=(4, -11),
-                      textcoords="offset points", fontsize=8, color=INK)
+        if series is CURVE_SERIES:
+            axes.annotate(short_label, (budgets[0], means[0]), xytext=(4, -11),
+                          textcoords="offset points", fontsize=8, color=INK)
     for name, label in REFERENCE_LINES.items():
         level = statistics.fmean(final["mean_return"] for final in references[name].values())
         axes.axhline(level, color=MUTED, linewidth=1, linestyle="--")
@@ -117,6 +124,7 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--input", type=Path, default=Path("outputs/q_table_ladder.json"))
     parser.add_argument("--table", type=Path, default=Path("outputs/q_table_results.md"))
     parser.add_argument("--figure", type=Path, default=Path("outputs/learning_curves.png"))
+    parser.add_argument("--series", choices=("ladder", "shaping"), default="ladder")
     return parser.parse_args()
 
 
@@ -126,7 +134,8 @@ def main() -> None:
     table = results_table(report)
     args.table.parent.mkdir(parents=True, exist_ok=True)
     args.table.write_text(table, encoding="utf-8")
-    learning_curve(report, args.figure)
+    series = SHAPING_SERIES if args.series == 'shaping' else CURVE_SERIES
+    learning_curve(report, args.figure, series)
     print(table)
 
 

@@ -20,7 +20,7 @@ from evaluate import (
     hit_below_17,
     random_policy,
 )
-from traditional_baselines import STICK
+from traditional_baselines import STICK, BlackjackModel, policy_iteration
 
 QTable = dict[Hashable, list[float]]
 EPSILON = 0.3
@@ -38,6 +38,7 @@ class Stage:
     use_count: bool = False
     allow_double: bool = False
     bust_penalty: float = 0.0
+    potential: str = ""  # "", "value" or "heuristic": potential-based shaping, training only
 
     def state(self, observation: Observation) -> tuple:
         key: tuple = (observation.total, observation.upcard, observation.soft)
@@ -59,7 +60,29 @@ STAGES = (
     Stage("bust_0.1", "+ double, bust penalty 0.1", allow_double=True, bust_penalty=0.1),
     Stage("bust_0.25", "+ double, bust penalty 0.25", allow_double=True, bust_penalty=0.25),
     Stage("bust_0.5", "+ double, bust penalty 0.5", allow_double=True, bust_penalty=0.5),
+    Stage("shaped_heuristic", "+ double, shaping: total/21", allow_double=True,
+          potential="heuristic"),
+    Stage("shaped_value", "+ double, shaping: basic-strategy value", allow_double=True,
+          potential="value"),
 )
+
+_BASIC_VALUES: dict | None = None
+
+
+def potential(kind: str, observation: Observation | None) -> float:
+    """Phi(s) for shaping F = Phi(s') - Phi(s), with Phi(terminal) = 0 so that, with
+    gamma = 1, every hand's shaping sums to -Phi(s0) and the optimal policy is unchanged
+    (Ng, Harada and Russell, 1999)."""
+    global _BASIC_VALUES
+    if not kind or observation is None:
+        return 0.0
+    if kind == "heuristic":
+        return observation.total / 21
+    if kind == "value":
+        if _BASIC_VALUES is None:
+            _BASIC_VALUES = policy_iteration(BlackjackModel()).values
+        return _BASIC_VALUES[(observation.total, observation.upcard, observation.soft)]
+    raise ValueError(f"unknown potential {kind!r}")
 
 
 def train_q_table(
@@ -93,8 +116,10 @@ def train_q_table(
                 action = rng.choice(actions)
             else:
                 action = max(actions, key=values.__getitem__)
+            shaping = -potential(stage.potential, observation)
             observation, reward, done = env.step(action)
-            target = reward
+            shaping += 0.0 if done else potential(stage.potential, observation)
+            target = reward + shaping
             if done:
                 target -= stage.bust_penalty * env.busted
             else:

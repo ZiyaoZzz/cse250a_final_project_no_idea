@@ -9,7 +9,7 @@
   "eval_seeds": "2000000 + training seed",
   "epsilon": 0.3,
   "alpha_power": 0.85,
-  "seconds": 1439.2
+  "seconds": 1768.5
  },
  "stages": [
   {

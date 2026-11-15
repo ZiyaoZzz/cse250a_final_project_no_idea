@@ -102,5 +102,24 @@ class TrainingTests(unittest.TestCase):
         self.assertEqual(hit_below_17(Observation(17, 2, True, 2, False, 0.0)), STICK)
 
 
+class ShapingTests(unittest.TestCase):
+    def test_potentials_are_zero_at_terminal_and_defined_everywhere(self):
+        from q_table import potential
+
+        for kind in ("heuristic", "value"):
+            self.assertEqual(potential(kind, None), 0.0)
+            for total in range(4, 22):
+                for upcard in range(1, 11):
+                    obs = Observation(total, upcard, total >= 12, 2, True, 0.0)
+                    self.assertTrue(-2.0 <= potential(kind, obs) <= 2.0)
+
+    def test_value_shaping_still_learns_basic_strategy_quality(self):
+        stage = STAGE["shaped_value"]
+        table = train_q_table(stage, hands=200_000, seed=3, num_decks=None)
+        result = evaluate_policy(greedy_policy(stage, table), hands=100_000, num_decks=None,
+                                 allow_double=True, seed=5)
+        self.assertGreater(result["mean_return"], -0.07)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,13 +1,9 @@
-"""Model-based policy iteration and tabular Q-learning for Blackjack-v1."""
+"""Exact Blackjack-v1 model, policy iteration, and a Gymnasium policy evaluator."""
 
 from __future__ import annotations
 
-import argparse
-import json
-import random
 from collections import defaultdict
 from dataclasses import dataclass
-from pathlib import Path
 from typing import TypeAlias
 
 from env_setup import make_blackjack_env
@@ -163,50 +159,6 @@ def policy_iteration(
     raise RuntimeError(f"Policy iteration did not converge in {max_iterations} iterations")
 
 
-def train_q_learning(
-    *,
-    episodes: int = 100_000,
-    seed: int = 0,
-    learning_rate: float = 0.1,
-    discount_factor: float = 1.0,
-    epsilon_start: float = 1.0,
-    epsilon_end: float = 0.05,
-) -> dict[State, tuple[float, float]]:
-    """Train tabular Q-learning in the configured Gymnasium environment."""
-    if episodes < 1:
-        raise ValueError("episodes must be at least 1")
-    if not 0 < learning_rate <= 1:
-        raise ValueError("learning_rate must be in (0, 1]")
-    if not 0 <= epsilon_end <= epsilon_start <= 1:
-        raise ValueError("epsilon values must satisfy 0 <= end <= start <= 1")
-
-    rng = random.Random(seed)
-    q_values: defaultdict[State, list[float]] = defaultdict(lambda: [0.0, 0.0])
-    with make_blackjack_env() as env:
-        for episode in range(episodes):
-            state, _ = env.reset(seed=seed + episode)
-            epsilon = epsilon_start + (epsilon_end - epsilon_start) * episode / max(
-                episodes - 1, 1
-            )
-            while True:
-                action = (
-                    rng.randrange(2)
-                    if rng.random() < epsilon
-                    else int(q_values[state][HIT] > q_values[state][STICK])
-                )
-                next_state, reward, terminated, truncated, _ = env.step(action)
-                target = reward
-                if not (terminated or truncated):
-                    target += discount_factor * max(q_values[next_state])
-                q_values[state][action] += learning_rate * (
-                    target - q_values[state][action]
-                )
-                if terminated or truncated:
-                    break
-                state = next_state
-    return {state: (values[STICK], values[HIT]) for state, values in q_values.items()}
-
-
 def evaluate_policy(
     policy: dict[State, Action],
     *,
@@ -233,43 +185,3 @@ def evaluate_policy(
         "draw_rate": sum(reward == 0 for reward in returns) / episodes,
         "loss_rate": sum(reward == -1 for reward in returns) / episodes,
     }
-
-
-def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--q-episodes", type=int, default=100_000)
-    parser.add_argument("--eval-episodes", type=int, default=10_000)
-    parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument(
-        "--output", type=Path, default=Path("outputs/phase2_baselines.json")
-    )
-    return parser.parse_args()
-
-
-def main() -> None:
-    args = _parse_args()
-    model = BlackjackModel()
-    result = policy_iteration(model)
-    q_values = train_q_learning(episodes=args.q_episodes, seed=args.seed)
-    q_policy = {state: int(hit > stick) for state, (stick, hit) in q_values.items()}
-    report = {
-        "environment": "Blackjack-v1 (natural=False, sab=False)",
-        "training_seed": args.seed,
-        "policy_iteration_iterations": result.iterations,
-        "policy_iteration": evaluate_policy(
-            result.policy, episodes=args.eval_episodes, seed=args.seed + 1_000_000
-        ),
-        "q_learning": evaluate_policy(
-            q_policy,
-            episodes=args.eval_episodes,
-            seed=args.seed + 2_000_000,
-        ),
-        "q_learning_training_episodes": args.q_episodes,
-    }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps(report, indent=2))
-
-
-if __name__ == "__main__":
-    main()
