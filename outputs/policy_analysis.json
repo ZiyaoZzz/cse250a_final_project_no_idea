@@ -4,38 +4,184 @@
     "sens_hands": 3000000,
     "eval_hands": 2000000,
     "seeds": 5,
+    "first_seed": 0,
     "workers": null,
     "out": "outputs"
   },
+  "validation_infinite_deck": {
+    "basic_strategy": {
+      "exact": -0.046555977066697486,
+      "simulated": -0.0452405,
+      "simulated_ci95": 0.0013174271248883418,
+      "gymnasium": -0.047892,
+      "gymnasium_ci95": 0.001862749143202159
+    },
+    "basic_strategy_double": {
+      "exact": -0.0340247486301591,
+      "simulated": -0.032744,
+      "simulated_ci95": 0.0014727736547366574
+    }
+  },
   "policy_vs_basic_6deck": {
-    "hard": [
+    "cells_compared": 240,
+    "disagreements": [
       {
+        "kind": "hard",
         "total": 12,
         "upcard": 4,
         "basic": "S",
-        "learned": "H"
-      }
-    ],
-    "soft": [
+        "learned": "H",
+        "seeds_choosing_learned": "5/5",
+        "q_gap_by_seed": [
+          0.0093,
+          0.0004,
+          0.0031,
+          0.0021,
+          0.0002
+        ],
+        "exact_gap": 0.0025,
+        "deal_probability": 0.00683,
+        "cost_per_hand": 1.7e-05
+      },
       {
+        "kind": "soft",
         "total": 13,
         "upcard": 6,
         "basic": "D",
-        "learned": "H"
+        "learned": "H",
+        "seeds_choosing_learned": "4/5",
+        "q_gap_by_seed": [
+          0.0084,
+          0.0038,
+          0.004,
+          0.0081,
+          -0.0624
+        ],
+        "exact_gap": 0.0181,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 1.6e-05
       },
       {
+        "kind": "soft",
         "total": 14,
         "upcard": 5,
         "basic": "D",
-        "learned": "H"
+        "learned": "H",
+        "seeds_choosing_learned": "3/5",
+        "q_gap_by_seed": [
+          0.0011,
+          0.0027,
+          -0.07,
+          0.0608,
+          -0.0629
+        ],
+        "exact_gap": 0.0141,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 1.3e-05
       },
       {
+        "kind": "soft",
         "total": 15,
         "upcard": 5,
         "basic": "D",
-        "learned": "H"
+        "learned": "H",
+        "seeds_choosing_learned": "3/5",
+        "q_gap_by_seed": [
+          -0.0127,
+          0.0139,
+          0.004,
+          -0.0712,
+          0.0096
+        ],
+        "exact_gap": 0.034,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 3.1e-05
       }
-    ]
+    ],
+    "predicted_cost_per_hand": 7.7e-05
+  },
+  "policy_vs_basic_infinite_deck": {
+    "cells_compared": 240,
+    "disagreements": [
+      {
+        "kind": "soft",
+        "total": 13,
+        "upcard": 6,
+        "basic": "D",
+        "learned": "H",
+        "seeds_choosing_learned": "4/5",
+        "q_gap_by_seed": [
+          0.0138,
+          0.0062,
+          0.0037,
+          -0.0322,
+          0.0558
+        ],
+        "exact_gap": 0.0181,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 1.6e-05
+      },
+      {
+        "kind": "soft",
+        "total": 14,
+        "upcard": 5,
+        "basic": "D",
+        "learned": "H",
+        "seeds_choosing_learned": "5/5",
+        "q_gap_by_seed": [
+          0.0144,
+          0.0271,
+          0.0073,
+          0.004,
+          0.0111
+        ],
+        "exact_gap": 0.0141,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 1.3e-05
+      },
+      {
+        "kind": "soft",
+        "total": 17,
+        "upcard": 2,
+        "basic": "H",
+        "learned": "D",
+        "seeds_choosing_learned": "3/5",
+        "q_gap_by_seed": [
+          0.0756,
+          -0.0091,
+          -0.0004,
+          0.0237,
+          0.0254
+        ],
+        "exact_gap": 0.0066,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 6e-06
+      },
+      {
+        "kind": "soft",
+        "total": 17,
+        "upcard": 3,
+        "basic": "D",
+        "learned": "H",
+        "seeds_choosing_learned": "3/5",
+        "q_gap_by_seed": [
+          -0.1191,
+          0.0113,
+          0.0404,
+          -0.0463,
+          0.0041
+        ],
+        "exact_gap": 0.0261,
+        "deal_probability": 0.00091,
+        "cost_per_hand": 2.4e-05
+      }
+    ],
+    "predicted_cost_per_hand": 5.9e-05,
+    "q_error_by_action": {
+      "S": -0.00042,
+      "H": -0.00024,
+      "D": -0.00028
+    }
   },
   "count_deviations_1deck": [
     {
@@ -687,6 +833,2081 @@
       }
     }
   ],
+  "count_deviations_1deck_buckets3": [
+    {
+      "total": 8,
+      "upcard": 4,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 8,
+      "upcard": 5,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 8,
+      "upcard": 6,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 2,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 3,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "D",
+        "0": "H",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 4,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 5,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 6,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "D",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 9,
+      "upcard": 7,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 10,
+      "upcard": 7,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "D",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 10,
+      "upcard": 8,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 10,
+      "upcard": 9,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 11,
+      "upcard": 8,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "D",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 11,
+      "upcard": 9,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 11,
+      "upcard": 10,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 12,
+      "upcard": 2,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "S"
+      }
+    },
+    {
+      "total": 12,
+      "upcard": 3,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "S"
+      }
+    },
+    {
+      "total": 12,
+      "upcard": 4,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 12,
+      "upcard": 5,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 12,
+      "upcard": 6,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 2,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 3,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 4,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 5,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 6,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 2,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 3,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 4,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 15,
+      "upcard": 2,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 15,
+      "upcard": 10,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "S"
+      }
+    },
+    {
+      "total": 16,
+      "upcard": 10,
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 17,
+      "upcard": "A",
+      "soft": false,
+      "by_count": {
+        "-3": "H",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "S"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 13,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "H",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 14,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "D",
+        "0": "H",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 15,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 15,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "H",
+        "0": "H",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 15,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 16,
+      "upcard": 3,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 16,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 16,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "H",
+        "0": "D",
+        "1": "H",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 16,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "D",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 17,
+      "upcard": 2,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "H",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 17,
+      "upcard": 3,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "H",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 17,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "H",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 17,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "D",
+        "-2": "H",
+        "-1": "H",
+        "0": "D",
+        "1": "D",
+        "2": "H",
+        "3": "D"
+      }
+    },
+    {
+      "total": 18,
+      "upcard": 2,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "D"
+      }
+    },
+    {
+      "total": 18,
+      "upcard": 3,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 18,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "D",
+        "-2": "S",
+        "-1": "D",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 18,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "D",
+        "-2": "S",
+        "-1": "D",
+        "0": "D",
+        "1": "D",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 19,
+      "upcard": 3,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "D"
+      }
+    },
+    {
+      "total": 19,
+      "upcard": 4,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 19,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "D",
+        "3": "D"
+      }
+    },
+    {
+      "total": 19,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "D",
+        "2": "S",
+        "3": "D"
+      }
+    },
+    {
+      "total": 20,
+      "upcard": 5,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "D"
+      }
+    },
+    {
+      "total": 20,
+      "upcard": 6,
+      "soft": true,
+      "by_count": {
+        "-3": "S",
+        "-2": "S",
+        "-1": "S",
+        "0": "S",
+        "1": "S",
+        "2": "S",
+        "3": "D"
+      }
+    }
+  ],
+  "bucket_comparison_1deck": {
+    "cells_varying_with_count": {
+      "buckets_2": 54,
+      "buckets_3": 59
+    },
+    "changes_beyond_2": [
+      {
+        "total": 8,
+        "upcard": 4,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 8,
+        "upcard": 5,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 8,
+        "upcard": 6,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 9,
+        "upcard": 2,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 9,
+        "upcard": 6,
+        "soft": false,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 9,
+        "upcard": 7,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 10,
+        "upcard": 7,
+        "soft": false,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 11,
+        "upcard": 8,
+        "soft": false,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 12,
+        "upcard": 2,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "S"
+      },
+      {
+        "total": 12,
+        "upcard": 3,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "S"
+      },
+      {
+        "total": 12,
+        "upcard": 6,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "S"
+      },
+      {
+        "total": 13,
+        "upcard": 5,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 13,
+        "upcard": 6,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 14,
+        "upcard": 2,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 14,
+        "upcard": 3,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 14,
+        "upcard": 4,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 15,
+        "upcard": 2,
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 15,
+        "upcard": 10,
+        "soft": false,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "S"
+      },
+      {
+        "total": 17,
+        "upcard": "A",
+        "soft": false,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "H"
+      },
+      {
+        "total": 13,
+        "upcard": 4,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 13,
+        "upcard": 5,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 14,
+        "upcard": 4,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 14,
+        "upcard": 5,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 15,
+        "upcard": 4,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 15,
+        "upcard": 5,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 15,
+        "upcard": 5,
+        "soft": true,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 15,
+        "upcard": 6,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 15,
+        "upcard": 6,
+        "soft": true,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 16,
+        "upcard": 3,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 16,
+        "upcard": 4,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 16,
+        "upcard": 5,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 16,
+        "upcard": 5,
+        "soft": true,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 16,
+        "upcard": 6,
+        "soft": true,
+        "side": "-",
+        "at_2": "D",
+        "at_3": "H"
+      },
+      {
+        "total": 17,
+        "upcard": 3,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 17,
+        "upcard": 6,
+        "soft": true,
+        "side": "+",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 17,
+        "upcard": 6,
+        "soft": true,
+        "side": "-",
+        "at_2": "H",
+        "at_3": "D"
+      },
+      {
+        "total": 18,
+        "upcard": 2,
+        "soft": true,
+        "side": "+",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 18,
+        "upcard": 5,
+        "soft": true,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 18,
+        "upcard": 6,
+        "soft": true,
+        "side": "-",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 19,
+        "upcard": 3,
+        "soft": true,
+        "side": "+",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 19,
+        "upcard": 6,
+        "soft": true,
+        "side": "+",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 20,
+        "upcard": 5,
+        "soft": true,
+        "side": "+",
+        "at_2": "S",
+        "at_3": "D"
+      },
+      {
+        "total": 20,
+        "upcard": 6,
+        "soft": true,
+        "side": "+",
+        "at_2": "S",
+        "at_3": "D"
+      }
+    ]
+  },
+  "true_count_shares": [
+    {
+      "decks": 1,
+      "abs_0": 0.148468,
+      "abs_1": 0.139708,
+      "abs_2": 0.134518,
+      "abs_3_or_more": 0.577306
+    },
+    {
+      "decks": 2,
+      "abs_0": 0.110533,
+      "abs_1": 0.2725395,
+      "abs_2": 0.1793605,
+      "abs_3_or_more": 0.437567
+    },
+    {
+      "decks": 6,
+      "abs_0": 0.247971,
+      "abs_1": 0.335338,
+      "abs_2": 0.1800305,
+      "abs_3_or_more": 0.2366605
+    }
+  ],
+  "bust_penalty": {
+    "learned_6deck": [
+      {
+        "decision": "first",
+        "total": 12,
+        "upcard": 3,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 12,
+        "upcard": 4,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 15,
+        "upcard": 10,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 16,
+        "upcard": 8,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 16,
+        "upcard": 9,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 16,
+        "upcard": 10,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "first",
+        "total": 15,
+        "upcard": 5,
+        "soft": true,
+        "true_reward": "H",
+        "penalty": "D"
+      },
+      {
+        "decision": "first",
+        "total": 17,
+        "upcard": 3,
+        "soft": true,
+        "true_reward": "D",
+        "penalty": "H"
+      },
+      {
+        "decision": "first",
+        "total": 18,
+        "upcard": 2,
+        "soft": true,
+        "true_reward": "S",
+        "penalty": "D"
+      },
+      {
+        "decision": "later",
+        "total": 12,
+        "upcard": 3,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "later",
+        "total": 15,
+        "upcard": 10,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "later",
+        "total": 16,
+        "upcard": 7,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "later",
+        "total": 16,
+        "upcard": 8,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "later",
+        "total": 16,
+        "upcard": 9,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      },
+      {
+        "decision": "later",
+        "total": 16,
+        "upcard": 10,
+        "soft": false,
+        "true_reward": "H",
+        "penalty": "S"
+      }
+    ],
+    "exact_infinite_deck": [
+      {
+        "penalty": 0.1,
+        "cost_per_hand": 0.00326,
+        "changes": [
+          {
+            "decision": "first",
+            "total": 11,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "D"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          }
+        ]
+      },
+      {
+        "penalty": 0.25,
+        "cost_per_hand": 0.01086,
+        "changes": [
+          {
+            "decision": "first",
+            "total": 11,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "D"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 2,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 18,
+            "upcard": "A",
+            "soft": true,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 2,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 18,
+            "upcard": "A",
+            "soft": true,
+            "true_reward": "H",
+            "penalty": "S"
+          }
+        ]
+      },
+      {
+        "penalty": 0.5,
+        "cost_per_hand": 0.03049,
+        "changes": [
+          {
+            "decision": "first",
+            "total": 11,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "D"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 2,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 12,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 13,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 13,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 13,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 13,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 13,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 14,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "first",
+            "total": 18,
+            "upcard": "A",
+            "soft": true,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 2,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 3,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 12,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 13,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 13,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 13,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 13,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 13,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 14,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 15,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": "A",
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 7,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 8,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 9,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 16,
+            "upcard": 10,
+            "soft": false,
+            "true_reward": "H",
+            "penalty": "S"
+          },
+          {
+            "decision": "later",
+            "total": 18,
+            "upcard": "A",
+            "soft": true,
+            "true_reward": "H",
+            "penalty": "S"
+          }
+        ]
+      }
+    ]
+  },
   "sensitivity": [
     {
       "epsilon": 0.1,

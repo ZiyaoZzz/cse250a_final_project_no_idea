@@ -48,11 +48,41 @@ def _finals_by_seed(rows: list[dict], key: str) -> dict[str, dict[int, dict]]:
     return grouped
 
 
-def results_table(report: dict) -> str:
+def merge_reports(reports: list[dict]) -> dict:
+    """Combine reports run with the same settings; seeded runs stay paired by seed."""
+    merged = {"settings": reports[0]["settings"], "stages": [], "references": [], "runs": []}
+    seen_stages, seen_runs, seen_references = set(), set(), set()
+    for report in reports:
+        settings = report["settings"]
+        for key in settings.keys() & merged["settings"].keys() - {"seconds"}:
+            if settings[key] != merged["settings"][key]:
+                raise ValueError(f"reports differ in {key}: "
+                                 f"{merged['settings'][key]!r} vs {settings[key]!r}")
+        for stage in report["stages"]:
+            if stage["name"] not in seen_stages:
+                seen_stages.add(stage["name"])
+                merged["stages"].append(stage)
+        for run in report["runs"]:
+            if (run["stage"], run["seed"]) not in seen_runs:
+                seen_runs.add((run["stage"], run["seed"]))
+                merged["runs"].append(run)
+        for reference in report["references"]:
+            if (reference["policy"], reference["seed"]) not in seen_references:
+                seen_references.add((reference["policy"], reference["seed"]))
+                merged["references"].append(reference)
+    return merged
+
+
+def results_table(
+    report: dict,
+    stage_names: list[str] | None = None,
+    comparisons: list[tuple[str, str]] = (),
+) -> str:
     """Markdown table; deltas are paired by seed, so both sides saw the same eval shoe."""
     stages = _finals_by_seed(report["runs"], "stage")
     references = _finals_by_seed(report["references"], "policy")
     states = {row["stage"]: row["states"] for row in report["runs"]}
+    labels = {stage["name"]: stage["label"] for stage in report["stages"]}
     baseline = stages["baseline"]
 
     def row(label: str, finals: dict[int, dict], table_size: str) -> str:
@@ -72,10 +102,21 @@ def results_table(report: dict) -> str:
         "| Policy | Table states | Mean return / hand | Change vs baseline | Win | Bust | Double |",
         "|---|---:|---:|---:|---:|---:|---:|",
     ]
-    for stage in report["stages"]:
-        lines.append(row(stage["label"], stages[stage["name"]], f"{states[stage['name']]:,}"))
+    for name in stage_names or [stage["name"] for stage in report["stages"]]:
+        lines.append(row(labels[name], stages[name], f"{states[name]:,}"))
     for name, finals in references.items():
         lines.append(row(f"*Reference: {name.replace('_', ' ')}*", finals, "—"))
+    if comparisons:
+        lines += ["", "| Paired difference | Mean return / hand |", "|---|---:|"]
+        for first, second in comparisons:
+            if stages[first].keys() != stages[second].keys():
+                raise ValueError(f"{first} and {second} were not run with the same seeds")
+            delta, delta_width = mean_ci([
+                stages[first][seed]["mean_return"] - stages[second][seed]["mean_return"]
+                for seed in stages[first]
+            ])
+            lines.append(f"| {labels[first]} − ({labels[second]}) "
+                         f"| {delta:+.4f} ± {delta_width:.4f} |")
     return "\n".join(lines) + "\n"
 
 
@@ -121,21 +162,29 @@ def learning_curve(report: dict, path: Path, series: dict = CURVE_SERIES) -> Non
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", type=Path, default=Path("outputs/q_table_ladder.json"))
+    parser.add_argument("--input", type=Path, nargs="+",
+                        default=[Path("outputs/q_table_ladder.json")],
+                        help="one report, or several run with the same settings")
     parser.add_argument("--table", type=Path, default=Path("outputs/q_table_results.md"))
     parser.add_argument("--figure", type=Path, default=Path("outputs/learning_curves.png"))
-    parser.add_argument("--series", choices=("ladder", "shaping"), default="ladder")
+    parser.add_argument("--series", choices=("ladder", "shaping", "none"), default="ladder",
+                        help="'none' skips the learning-curve figure")
+    parser.add_argument("--stages", nargs="*", help="rows to show, in order; default: all")
+    parser.add_argument("--compare", nargs="*", default=[], metavar="A:B",
+                        help="add the paired difference 'stage A minus stage B'")
     return parser.parse_args()
 
 
 def main() -> None:
     args = _parse_args()
-    report = json.loads(args.input.read_text(encoding="utf-8"))
-    table = results_table(report)
+    report = merge_reports([json.loads(path.read_text(encoding="utf-8")) for path in args.input])
+    comparisons = [tuple(pair.split(":")) for pair in args.compare]
+    table = results_table(report, args.stages, comparisons)
     args.table.parent.mkdir(parents=True, exist_ok=True)
     args.table.write_text(table, encoding="utf-8")
-    series = SHAPING_SERIES if args.series == 'shaping' else CURVE_SERIES
-    learning_curve(report, args.figure, series)
+    if args.series != "none":
+        series = SHAPING_SERIES if args.series == "shaping" else CURVE_SERIES
+        learning_curve(report, args.figure, series)
     print(table)
 
 

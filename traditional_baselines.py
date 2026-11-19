@@ -4,12 +4,11 @@ from __future__ import annotations
 
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import TypeAlias
 
 from env_setup import make_blackjack_env
 
-State: TypeAlias = tuple[int, int, bool]
-Action: TypeAlias = int
+State = tuple[int, int, bool]
+Action = int
 STICK = 0
 HIT = 1
 CARD_PROBABILITIES = tuple([1 / 13] * 9 + [4 / 13])

@@ -66,6 +66,13 @@ class StateTests(unittest.TestCase):
         self.assertEqual(STAGE["double"].state(observation), (16, 10, False, False))
         self.assertEqual(STAGE["count_double"].state(observation), (16, 10, False, 2, False))
 
+    def test_count_limit_sets_the_outer_bucket(self):
+        observation = Observation(16, 10, False, 3, False, 2.7)
+        self.assertEqual(STAGE["count"].state(observation), (16, 10, False, 2))
+        self.assertEqual(STAGE["count_3"].state(observation), (16, 10, False, 3))
+        self.assertEqual(STAGE["count_double_3"].state(observation._replace(true_count=-9.0)),
+                         (16, 10, False, -3, False))
+
 
 class TrainingTests(unittest.TestCase):
     def test_table_learns_obvious_decisions_and_beats_random(self):

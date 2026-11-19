@@ -36,6 +36,7 @@ class Stage:
     label: str
     use_num_cards: bool = False
     use_count: bool = False
+    count_limit: int = 2  # true-count buckets are clipped to +/- this value
     allow_double: bool = False
     bust_penalty: float = 0.0
     potential: str = ""  # "", "value" or "heuristic": potential-based shaping, training only
@@ -45,7 +46,7 @@ class Stage:
         if self.use_num_cards:
             key += (min(observation.num_cards, 4),)
         if self.use_count:
-            key += (count_bucket(observation.true_count),)
+            key += (count_bucket(observation.true_count, self.count_limit),)
         if self.allow_double:
             key += (observation.can_double,)  # Double is legal only in these states.
         return key
@@ -64,7 +65,13 @@ STAGES = (
           potential="heuristic"),
     Stage("shaped_value", "+ double, shaping: basic-strategy value", allow_double=True,
           potential="value"),
+    Stage("count_3", "+ Hi-Lo true count, buckets ±3", use_count=True, count_limit=3),
+    Stage("count_double_3", "+ Hi-Lo count ±3 + double down", use_count=True,
+          allow_double=True, count_limit=3),
 )
+# The main results table; run the shaping and +/-3 bucket stages with --stages.
+LADDER = ("baseline", "num_cards", "count", "double", "count_double",
+          "bust_0.1", "bust_0.25", "bust_0.5")
 
 _BASIC_VALUES: dict | None = None
 
@@ -203,9 +210,13 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument("--eval-hands", type=int, default=10_000_000)
     parser.add_argument("--curve-hands", type=int, default=1_000_000)
     parser.add_argument("--seeds", type=int, default=5)
+    parser.add_argument("--first-seed", type=int, default=0,
+                        help="training seeds are first-seed .. first-seed + seeds - 1")
     parser.add_argument("--decks", type=int, default=6, help="0 means an infinite deck")
-    parser.add_argument("--stages", nargs="*", help="stage names; default is all")
-    parser.add_argument("--workers", type=int, default=14)
+    parser.add_argument("--stages", nargs="*", help=f"stage names; default: {' '.join(LADDER)}")
+    parser.add_argument("--skip-references", action="store_true",
+                        help="skip the reference policies (when merging with another report)")
+    parser.add_argument("--workers", type=int, default=None, help="default: all CPU cores")
     parser.add_argument("--output", type=Path, default=Path("outputs/q_table_ladder.json"))
     return parser.parse_args()
 
@@ -213,16 +224,21 @@ def _parse_args() -> argparse.Namespace:
 def main() -> None:
     args = _parse_args()
     num_decks = args.decks or None
-    stages = [stage for stage in STAGES if not args.stages or stage.name in args.stages]
+    names = args.stages or LADDER
+    unknown = set(names) - {stage.name for stage in STAGES}
+    if unknown:
+        raise SystemExit(f"unknown stages: {sorted(unknown)}")
+    stages = [stage for stage in STAGES if stage.name in names]
+    seeds = range(args.first_seed, args.first_seed + args.seeds)
     jobs = [
         (stage, seed, args.hands, args.eval_hands, args.curve_hands, num_decks)
         for stage in stages
-        for seed in range(args.seeds)
+        for seed in seeds
     ]
-    reference_jobs = [
+    reference_jobs = [] if args.skip_references else [
         (name, seed, args.eval_hands, num_decks)
         for name in ("random", "hit_below_17", "basic_strategy", "basic_strategy_double")
-        for seed in range(args.seeds)
+        for seed in seeds
     ]
     started = time.perf_counter()
     with ProcessPoolExecutor(args.workers) as pool:
@@ -236,6 +252,7 @@ def main() -> None:
             "eval_hands": args.eval_hands,
             "curve_hands": args.curve_hands,
             "train_seeds": args.seeds,
+            "first_seed": args.first_seed,
             "eval_seeds": f"{EVAL_SEED} + training seed",
             "epsilon": EPSILON,
             "alpha_power": ALPHA_POWER,
