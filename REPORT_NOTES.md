@@ -110,7 +110,7 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
 - On 1 deck, count + double (−0.0258) beats basic strategy + double (−0.0288) by
   0.003 per hand, because basic strategy ignores the count.
 
-### 4.2 Observation: Card Count (Member A's Topic)
+### 4.2 Observation: Card Count 
 
 - **The count helps more as the shoe gets smaller** (+0.0003 → +0.0011 → +0.0024).
   With fewer decks, each dealt card has a larger effect on the remaining shoe
