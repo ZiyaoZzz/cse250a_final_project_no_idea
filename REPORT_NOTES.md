@@ -110,21 +110,27 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
 - On 1 deck, count + double (−0.0258) beats basic strategy + double (−0.0288) by
   0.003 per hand, because basic strategy ignores the count.
 
-### 4.2 Observation: card count (Member A's topic)
+### 4.2 Observation: Card Count (Member A's Topic)
 
 - **The count helps more as the shoe gets smaller** (+0.0003 → +0.0011 → +0.0024).
-  With fewer decks each dealt card changes the remaining composition more, so the
-  dependence between draws is stronger.
-- **The number of cards adds nothing** (−0.0001 ± 0.0001).
+  With fewer decks, each dealt card has a larger effect on the remaining shoe
+  composition, so the dependence between draws is stronger.
+
+- **The number of cards adds almost nothing** (−0.0001 ± 0.0001).
+  This suggests that the useful state information comes from the count, not from
+  hand length.
+
 - **Count deviations** (1 deck, count + double, `count_deviations.png`): 54 of 240
-  first-decision cells change action with the count.
-  - At +2 the table stands on 12 vs 2–6, 13 vs 2, 15 vs 10 and 16 vs 10, and doubles
-    8 vs 5–6, 9 vs 2–4, 9 vs 7 and 11 vs 10.
-  - At −2 it hits 13 vs 3–6, 14 vs 2–3 and 15 vs 2, and stops doubling 9 vs 5–6,
-    10 vs 7–9 and 11 vs 8–9.
-  - This is the same direction as the standard Hi-Lo index plays (Schlesinger, 2005):
-    stand and double more at high counts, hit more and double less at low counts.
-  - Soft-hand deviations are noisier because those hands are rare.
+  first-decision cells change action when count is included.
+  - At +2, the table stands on 12 vs 2–6, 13 vs 2, 15 vs 10, and 16 vs 10, and doubles
+    8 vs 5–6, 9 vs 2–4, 9 vs 7, and 11 vs 10.
+  - At −2, it hits 13 vs 3–6, 14 vs 2–3, and 15 vs 2, and stops doubling 9 vs 5–6,
+    10 vs 7–9, and 11 vs 8–9.
+  - These changes follow the same direction as standard Hi-Lo index plays
+    (Schlesinger, 2005): stand and double more at high counts, hit more and double
+    less at low counts.
+  - Soft-hand deviations are noisier because those states are rarer.
+
 - **Buckets ±3 vs ±2** (paired difference, `q_table_results_buckets*.md`):
 
   | Decks | Count | Count + double | Hands with \|count\| ≥ 3 |
@@ -133,11 +139,13 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
   | 2 | +0.0002 ± 0.0003 | +0.0001 ± 0.0005 | 44% |
   | 6 | +0.0000 ± 0.0002 | −0.0002 ± 0.0003 | 24% |
 
-  - Many hands fall beyond ±2, yet finer buckets help only on 1 deck, by +0.0003,
-    while the table grows 40% (2,600 → 3,640 states).
-  - With ±3, some plays move from +2 to +3: for example, 12 vs 2–3 and 15 vs 10 stand
-    only at +3 (`count_deviations_buckets3.png`).
-  - Trade-off: finer resolution vs fewer visits per state.
+  - Many hands fall beyond ±2, but finer buckets only help clearly in the 1-deck case,
+    by about +0.0003.
+  - The table also grows by 40% (2,600 → 3,640 states), which gives fewer visits per
+    state.
+  - With ±3 buckets, some plays shift from +2 to +3. For example, 12 vs 2–3 and
+    15 vs 10 stand only at +3 (`count_deviations_buckets3.png`).
+  - Overall trade-off: finer count resolution vs lower sample efficiency.
 
 ### 4.3 Action: double down (Member B's topic)
 
