@@ -34,7 +34,7 @@ double. On 1 deck, count + double reaches -0.0258 and beats basic strategy + dou
 | Who | Owns | To do | Status |
 |---|---|---|---|
 | Ziyao | Environment and baseline | Merge everyone's work, keep experiment settings consistent, write the methods section | Done ([METHODS.md](METHODS.md)) |
-| Member A | Observation | Find which states change their decision with the count (for example 16 vs 10); compare count buckets of ±2 and ±3; write the observation bullet | In progress (data: REPORT_NOTES §4.2) |
+| HUANG Hao | Observation | Find which states change their decision with the count (for example 16 vs 10); compare count buckets of ±2 and ±3; write the observation bullet | In progress (data: REPORT_NOTES §4.2) |
 | Member B | Action | Plot where the Q-table doubles against basic strategy and explain the differences; write the action bullet | In progress (data: REPORT_NOTES §4.3) |
 | Member C | Reward | Explain why the bust penalty hurts and why shaping does not; write the reward bullet | In progress (data: REPORT_NOTES §4.4) |
 | Member D | Reproduction and report | Rerun everything from a clean clone with new seeds (`--first-seed 5`); confirm the conclusions hold; finalize the table and figures; assemble the report | To do |
