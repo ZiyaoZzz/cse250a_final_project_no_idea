@@ -147,7 +147,7 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
     15 vs 10 stand only at +3 (`count_deviations_buckets3.png`).
   - Overall trade-off: finer count resolution vs lower sample efficiency.
 
-### 4.3 Action: double down (Member B's topic)
+### 4.3 Action: double down (Mingyu Jin’s topic)
 
 - **Double is the largest gain**, +0.0126 ± 0.0004, removing about 28% of the house
   edge.
@@ -317,7 +317,7 @@ member's own words):
 |---|---|---|
 | Ziyao Zhou | Built the finite-shoe environment with the Hi-Lo count and double down, the exact model and policy-iteration baseline, the Q-learning ladder and the shared evaluation protocol. | After meeting with our TA, we narrowed the project from LLM fine-tuning to Q-learning alone. I learned that plain data and direct computation often explain a model better than an LLM can, and that chasing a harder, more complex method is not always the most cost-effective choice. |
 | Hao HUANG | Analyzed the observation-space modification by adding the Hi-Lo true count to the Q-table state. Compared ±2 and ±3 count buckets, identified count-dependent policy changes, and explained why count information helps more in smaller shoes. | I learned that adding more state information can improve decision quality, but it also increases the size of the Q-table and the amount of data needed. The count feature was most useful in one-deck Blackjack, where each observed card has a larger effect on the remaining shoe composition. |
-| [Member B] | [placeholder] | [placeholder] |
+| Mingyu Jin | Analyzed how adding double down changed the learned policy and compared its win rate with its mean return. | I learned why win rate alone can be misleading. With six decks, doubling lowered the win rate from 43.0% to 42.9% but improved mean return by 0.0126 per hand. |
 | [Member C] | [placeholder] | [placeholder] |
 | [Member D] | [placeholder] | [placeholder] |
 
