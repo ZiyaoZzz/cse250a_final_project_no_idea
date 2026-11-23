@@ -37,13 +37,16 @@ double. On 1 deck, count + double reaches -0.0258 and beats basic strategy + dou
 | HUANG Hao | Observation | Find which states change their decision with the count (for example 16 vs 10); compare count buckets of ±2 and ±3; write the observation bullet | Done (data: REPORT_NOTES §4.2) |
 | Mingyu Jin | Action | Plot where the Q-table doubles against basic strategy and explain the differences; write the action bullet | In progress (data: REPORT_NOTES §4.3) |
 | Member C | Reward | Explain why the bust penalty hurts and why shaping does not; write the reward bullet | In progress (data: REPORT_NOTES §4.4) |
-| Member D | Reproduction and report | Rerun everything from a clean clone with new seeds (`--first-seed 5`); confirm the conclusions hold; finalize the table and figures; assemble the report | To do |
+| Jinghao Liu | Reproduction and report | Rerun the simulator validation and the policy analysis and confirm they reproduce; finalize the table and figures; assemble the report | Done: validation at 20M hands ([outputs/validation_20m.json](outputs/validation_20m.json)); policy-map tables retrained from the original seeds and matched ([report/make_figures.py](report/make_figures.py)); report assembled on Overleaf |
 
 ## Setup notes
 
 `Blackjack-v1` deals from an infinite deck and has no double down, so `blackjack_shoe.py`
 keeps its rules and adds a 6-deck shoe and an optional double. All stages run there. With
-`num_decks=None` it matches Blackjack-v1 and the exact policy-iteration value.
+`num_decks=None` it matches Blackjack-v1 and the exact policy-iteration value: basic
+strategy returns −0.0467 ± 0.0004 over 20M hands in our simulator and −0.0466 ± 0.0006
+over 10M hands in Gymnasium, against −0.0466 exactly
+([outputs/validation_20m.json](outputs/validation_20m.json)).
 
 Compare stages with the same settings: fixed evaluation seeds, 5 training seeds, and
 millions of evaluation hands. At 50,000 hands the 95% interval is about ±0.009, which
@@ -75,6 +78,13 @@ python metrics_and_plots.py --input outputs/q_table_ladder_1deck.json outputs/q_
 
 # Policy charts, count deviations, bust penalty, sensitivity, validation (about 16 minutes)
 python policy_analysis.py
+
+# Simulator validation at 20M hands (about 9 minutes on one core)
+python -c "import json; from policy_analysis import validation; json.dump(validation(20_000_000), open('outputs/validation_20m.json', 'w'), indent=2)"
+
+# Report figures (summary figure and policy maps). Retrains the 15 Q-tables behind the
+# maps (about 4 minutes) and checks them against outputs/policy_analysis.json
+python report/make_figures.py --maps
 ```
 
 Swap `1deck` for `2deck` (and `--decks 2`) for 2 decks; the 6-deck files have no suffix.
@@ -93,3 +103,5 @@ Options: `--stages`, `--hands 1000000` for a quick run, and `--first-seed` for n
 | `outputs/q_table_results*.md` | Results tables |
 | `outputs/*.json` | Per-seed results and the analysis data behind every number |
 | `outputs/*.png` | Figures |
+| `outputs/validation_20m.json` | Simulator validation at 20M hands (METHODS, Validation) |
+| `report/make_figures.py` | Figures used in the report, written to `report/figures/` |

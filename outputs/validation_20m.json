@@ -1,0 +1,14 @@
+{
+  "basic_strategy": {
+    "exact": -0.046555977066697486,
+    "simulated": -0.04671715,
+    "simulated_ci95": 0.00041652536463858853,
+    "gymnasium": -0.046579,
+    "gymnasium_ci95": 0.000589072512808854
+  },
+  "basic_strategy_double": {
+    "exact": -0.0340247486301591,
+    "simulated": -0.034292,
+    "simulated_ci95": 0.00046556047035733013
+  }
+}

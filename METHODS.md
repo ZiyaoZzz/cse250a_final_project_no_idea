@@ -17,8 +17,16 @@ Q\*(s, a) = Σ_s′ P(s′ | s, a) [ r(s, a, s′) + max_a′ Q\*(s′, a′) ].
   dealer's outcome distribution can be computed exactly.
 - *Dealer hole card*: hidden from the player. On an infinite deck it is independent of
   the player's cards, so the value of sticking marginalises it out:
-  P(dealer final total | upcard) = Σ_hole P(hole) · P(final | upcard, hole), where the
-  last term is computed by recursion over the dealer's draws.
+  P(dealer final total | upcard) = Σ_hole P(hole) · P(final | upcard, hole).
+  - The last term is computed by recursion over the dealer's draws. Let F(h) be the
+    distribution of the dealer's final total from hand h, which is a total plus
+    whether it holds a usable ace.
+  - If the total of h is 17 or more, F(h) puts all its mass on that total. Every total
+    over 21 counts as one "bust" outcome.
+  - Otherwise F(h) = Σ_c P(c) · F(h + c), where h + c adds card c and an ace counts 11
+    unless that busts.
+  - Sticking on total t against upcard u is then worth
+    Q(t, u, stick) = Σ_d P(d | u) · sign(t − d), with a dealer bust counted as d = 0.
 - *Finite shoe*: cards are drawn without replacement, so they are not independent. The
   next card depends on every card already dealt, and the shoe composition is a hidden
   part of the true state. The baseline state is then not Markov (the problem is
@@ -29,8 +37,13 @@ Q\*(s, a) = Σ_s′ P(s′ | s, a) [ r(s, a, s′) + max_a′ Q\*(s′, a′) ].
 
 **Algorithms.**
 
-- *Policy iteration* (model-based) solves the infinite-deck MDP exactly. The resulting
-  policy is basic strategy, our reference.
+- *Policy iteration* (model-based) solves the infinite-deck MDP exactly. It starts from
+  "always stick" and alternates two steps until the policy stops changing:
+  - evaluation: V^π(s) = Σ_s′ P(s′ | s, π(s)) [ r(s, π(s), s′) + V^π(s′) ], iterated
+    until no value changes by more than 10^−10;
+  - improvement: π(s) ← argmax_a Σ_s′ P(s′ | s, a) [ r(s, a, s′) + V^π(s′) ].
+
+  The resulting policy is basic strategy, our reference.
 - *Q-learning* (model-free) learns from sampled hands without the model:
   Q(s, a) ← Q(s, a) + α (r + max_a′ Q(s′, a′) − Q(s, a)), with α = N(s, a)^−0.85.
   This step size satisfies the Robbins–Monro conditions (Σα = ∞, Σα² < ∞), so on a
@@ -75,12 +88,24 @@ The count resets at each shuffle. The true count is the running count divided by
 number of unseen decks.
 
 **Validation.** With an infinite deck the simulator matches the exact model and
-`Blackjack-v1` (basic strategy, 2M simulated hands, 1M Gymnasium hands):
+`Blackjack-v1`. The table uses 20M simulated hands per policy and 10M Gymnasium hands
+(`outputs/validation_20m.json`). Infinite-deck hands are independent, so the 95%
+intervals here are computed over hands.
 
 | Policy | Exact | Our simulator | Gymnasium |
 |---|---:|---:|---:|
-| Basic strategy | −0.0466 | −0.0452 ± 0.0013 | −0.0479 ± 0.0019 |
-| Basic strategy + double | −0.0340 | −0.0327 ± 0.0015 | — |
+| Basic strategy | −0.0466 | −0.0467 ± 0.0004 | −0.0466 ± 0.0006 |
+| Basic strategy + double | −0.0340 | −0.0343 ± 0.0005 | — |
+
+- Every simulated value is within its 95% interval of the exact value. The largest gap
+  is 0.0003.
+- The 2M-hand run in `policy_analysis.json` (−0.0452 ± 0.0013 for basic strategy) sat
+  at the edge of its interval, so we reran it with 10 times as many hands.
+- To reproduce with the same function (about 9 minutes on one core):
+
+  ```
+  python -c "import json; from policy_analysis import validation; json.dump(validation(20_000_000), open('outputs/validation_20m.json', 'w'), indent=2)"
+  ```
 
 ## Q-learning ladder
 
@@ -138,6 +163,10 @@ exceeds both stick and hit. Basic strategy ignores the count.
   policy, and solve the penalised objective exactly on the infinite deck: value
   iteration with a bust reward of −1 − p, then policy evaluation on the true reward.
   This gives the predicted policy changes and their cost per hand.
+- **Reproduction check.** `report/make_figures.py --maps` retrains the 15 tables behind
+  the policy maps (6-deck + double, 1-deck count + double, 6-deck bust penalty 0.1;
+  seeds 0–4) and stops unless they give the same 4 disagreements with basic strategy
+  and the same 54 count-dependent cells as `outputs/policy_analysis.json`.
 - **Sensitivity.** "+ double down" is trained with ε ∈ {0.1, 0.3, 0.5} and step-size
   exponents {0.6, 0.85, 1.0}: 3M training hands and 2M evaluation hands per seed,
   5 seeds.
