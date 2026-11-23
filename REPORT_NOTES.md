@@ -316,7 +316,7 @@ member's own words):
 | Member | Contribution | Personal reflection |
 |---|---|---|
 | Ziyao Zhou | Built the finite-shoe environment with the Hi-Lo count and double down, the exact model and policy-iteration baseline, the Q-learning ladder and the shared evaluation protocol. | After meeting with our TA, we narrowed the project from LLM fine-tuning to Q-learning alone. I learned that plain data and direct computation often explain a model better than an LLM can, and that chasing a harder, more complex method is not always the most cost-effective choice. |
-| [Member A] | [placeholder] | [placeholder] |
+| Hao HUANG | Analyzed the observation-space modification by adding the Hi-Lo true count to the Q-table state. Compared ±2 and ±3 count buckets, identified count-dependent policy changes, and explained why count information helps more in smaller shoes. | I learned that adding more state information can improve decision quality, but it also increases the size of the Q-table and the amount of data needed. The count feature was most useful in one-deck Blackjack, where each observed card has a larger effect on the remaining shoe composition. |
 | [Member B] | [placeholder] | [placeholder] |
 | [Member C] | [placeholder] | [placeholder] |
 | [Member D] | [placeholder] | [placeholder] |
