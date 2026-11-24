@@ -4,7 +4,7 @@ CSE 250A final project. We train a tabular Q-learning agent, start from a small
 observation, make 2–3 intuitive changes, and show how performance moves after each one.
 
 - Methods: [METHODS.md](METHODS.md)
-- Report materials, every number and figure organised by report section:
+- Report notes, every number and figure organised by report section, with its source:
   [REPORT_NOTES.md](REPORT_NOTES.md)
 
 ## Results
@@ -29,15 +29,15 @@ double. On 1 deck, count + double reaches -0.0258 and beats basic strategy + dou
 
 ![Learning curves](outputs/learning_curves.png)
 
-## Team TODO
+## Contributions
 
-| Who | Owns | To do | Status |
+| Member | Area | Contribution | Status |
 |---|---|---|---|
-| Ziyao | Environment and baseline | Merge everyone's work, keep experiment settings consistent, write the methods section | Done ([METHODS.md](METHODS.md)) |
-| HUANG Hao | Observation | Find which states change their decision with the count (for example 16 vs 10); compare count buckets of ±2 and ±3; write the observation bullet | Done (data: REPORT_NOTES §4.2) |
-| Mingyu Jin | Action | Plot where the Q-table doubles against basic strategy and explain the differences; write the action bullet | In progress (data: REPORT_NOTES §4.3) |
-| Member C | Reward | Explain why the bust penalty hurts and why shaping does not; write the reward bullet | In progress (data: REPORT_NOTES §4.4) |
-| Jinghao Liu | Reproduction and report | Rerun the simulator validation and the policy analysis and confirm they reproduce; finalize the table and figures; assemble the report | Done: validation at 20M hands ([outputs/validation_20m.json](outputs/validation_20m.json)); policy-map tables retrained from the original seeds and matched ([report/make_figures.py](report/make_figures.py)); report assembled on Overleaf |
+| Ziyao Zhou | Environment and baseline | Merged everyone's work, kept experiment settings consistent, wrote the methods section | Done ([METHODS.md](METHODS.md)) |
+| Hao Huang | Observation | Found which states change their decision with the count (for example 16 vs 10); compared count buckets of ±2 and ±3; wrote the observation section | Done (data: REPORT_NOTES §4.2) |
+| Mingyu Jin | Action | Compared where the Q-table doubles against basic strategy and explained the differences; wrote the action section | Done (data: REPORT_NOTES §4.3) |
+| Yiyang Fan | Reward | Explained why the bust penalty hurts and why shaping does not; wrote the reward section | Done (data: REPORT_NOTES §4.4) |
+| Jinghao Liu | Reproduction and report | Reran the simulator validation at 20M hands ([outputs/validation_20m.json](outputs/validation_20m.json)); retrained the policy-map tables from the original seeds and matched them ([report/make_figures.py](report/make_figures.py)); finalized the table and figures; assembled the report | Done |
 
 ## Setup notes
 
@@ -99,7 +99,7 @@ Options: `--stages`, `--hands 1000000` for a quick run, and `--first-seed` for n
 | `policy_analysis.py` | Policy charts, count deviations, bust penalty, sensitivity, validation |
 | `traditional_baselines.py` | Exact model and policy iteration, used for basic strategy |
 | `METHODS.md` | Methods section |
-| `REPORT_NOTES.md` | Report materials by section, with every number and its source |
+| `REPORT_NOTES.md` | Report notes by section, with every number and its source |
 | `outputs/q_table_results*.md` | Results tables |
 | `outputs/*.json` | Per-seed results and the analysis data behind every number |
 | `outputs/*.png` | Figures |

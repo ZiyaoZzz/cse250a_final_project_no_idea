@@ -1,46 +1,20 @@
 # Report Notes
 
-Everything the final report needs, in the order of the guideline's report structure
-(sections 1–7). Every number comes from a file in `outputs/`, named next to it, so the
-report can be written without rerunning code. Methods details are in
+Working notes the report was written from, in the order of its sections (1–7). Every
+number comes from a file in `outputs/`, named next to it. Methods details are in
 [METHODS.md](METHODS.md).
 
-These are notes, not report text: write the report in your own words (course GenAI
-policy).
+## Status
 
-Format: LaTeX on Overleaf (the NeurIPS style is advised, not required), at most 7 pages
-for sections 1–6. Due Nov 23, 11:59 PM on Gradescope (report + code), no grace period.
+Final. The submitted report on Gradescope is the authoritative version. Its figures
+come from `report/make_figures.py`. The code the report describes is frozen at the git
+tag `final`, and a zip of that tag was uploaded to Gradescope with the report.
 
-## Status (Nov 22)
-
-The report is drafted on Overleaf: title, abstract, sections 1–7 and an appendix. It
-uses the `article` class at 10pt with 0.75-inch margins. Its figures come from
-`report/make_figures.py`.
-
-Done:
-
-- Section 4 claims re-checked against `outputs/` and corrected: the 54 count cells,
-  the ±3 gain and table sizes, the bust-penalty doubles, the interval sizes.
-- Alternative explanations are in §4.3: an infinite-deck control run, the Q-value
-  spread across seeds, and no systematic Q bias.
-- Every reference is cited in the text, and the Kaggle entries are filled in.
-- Contributions are written for Ziyao, Mingyu, Hao and Jinghao.
-- Reproduction. The new-seed rerun (seeds 5–9) was not run. Instead, the simulator
-  validation was rerun at 20M hands (`outputs/validation_20m.json`). The 15 Q-tables
-  behind the policy maps were retrained from the original seeds. They reproduce the
-  saved analysis exactly: the same 4 disagreements with basic strategy and the same
-  54 count-dependent cells.
-
-Still open before Mon Nov 23, 11:59 PM (no grace period):
-
-1. Yiyang's contribution and reflection (§6).
-2. Page limit. With every contribution in, sections 1–6 run about 9 lines past 7
-   pages, so trim (the abstract is the easiest place).
-3. The GenAI statement still says the design and the interpretation are ours. Make
-   it match what the tools did (draft in §6 below).
-4. Code access. The repository is private: make it public, add the instructional
-   team, or upload a zip to Gradescope.
-5. Check the Kaggle authors and years against the dataset pages.
+Reproduction: the simulator validation was rerun at 20M hands
+(`outputs/validation_20m.json`), and the 15 Q-tables behind the policy maps were
+retrained from the original seeds. They reproduce the saved analysis exactly: the same
+4 disagreements with basic strategy and the same 54 count-dependent cells. A rerun on
+new seeds (5–9) was not done.
 
 ## Figures and tables
 
@@ -66,13 +40,12 @@ validation), `outputs/validation_20m.json` (the validation table in METHODS).
 - **Question:** starting from a minimal observation, how does each change to what a
   tabular Q-learning agent sees (card count), can do (double down) or is rewarded for
   (bust penalty, shaping) change what it learns in Blackjack, and why?
-- **Why it matters (suggested lead; the guideline asks "Why is this problem
-  important?"):**
+- **Why it matters:**
   - In most RL problems the optimum is unknown. So it is hard to tell whether a change
     to the state, the actions or the reward helped, and for what reason.
   - Blackjack can be solved exactly. Every difference in what the agent learns can be
     measured against ground truth and explained.
-  - Use the exact solution as the thread through §4: each subsection compares the
+  - The exact solution is the thread through §4: each subsection compares the
     learned table with it.
 - **Why Blackjack:** it is a small MDP with stochastic transitions and hidden
   information (dealer hole card, shoe composition). On an infinite deck it can be
@@ -85,8 +58,8 @@ validation), `outputs/validation_20m.json` (the validation table in METHODS).
     longer Markov. The count tests how much a summary statistic of the hidden state
     helps.
   - Reward design tests which reward changes preserve the optimal policy.
-- **Scope change:** the proposal also planned an LLM comparison. After discussing with
-  our TA, we focused on Q-learning.
+- **Scope change:** the proposal planned supervised fine-tuning (SFT) of an LLM. After
+  discussing with our TA, we focused on Q-learning.
 
 ## 2. Data sourcing and processing
 
@@ -99,15 +72,12 @@ See [METHODS.md](METHODS.md), "Data":
 Data volume: 30M training hands × 5 seeds per configuration, 10M evaluation hands per
 seed.
 
-Describe the simulator as the dataset. The rubric's top band asks for a dataset
-"described with sources, limits, and relevance", and the example reports all discuss
-data quality here. Cover:
+The simulator is the dataset:
 
 - **How hands are generated:** 1, 2 or 6 decks, reshuffled once 75% is dealt.
 - **How many:** the data volume above.
 - **How we know it is right:** the validation table in [METHODS.md](METHODS.md).
-- **Its limits:** `Blackjack-v1` rules are not casino rules. Today this appears only in
-  §5, so state it here too.
+- **Its limits:** `Blackjack-v1` rules are not casino rules (details in §5).
 
 Distribution of the true count (rounded) at the first decision, which motivates the
 clipping (`policy_analysis.json` → `true_count_shares`):
@@ -234,7 +204,7 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
   error against the exact values is under 0.0005 for every action (`q_error_by_action`).
 - The 4 cells together cost 0.00008 per hand (exact gap × deal probability).
 
-### 4.4 Reward: bust penalty and shaping (Member C's topic)
+### 4.4 Reward: bust penalty and shaping (Yiyang Fan's topic)
 
 | Bust penalty | Bust rate | Return lost (measured, paired) | Predicted by exact solution |
 |---:|---:|---:|---:|
@@ -269,7 +239,7 @@ Change vs baseline by shoe size (`q_table_results_1deck.md`, `_2deck.md`):
     (8.3% → 8.4%).
   - At 0.25 and 0.5 the double rate rises to 9.2% and 9.1% (`q_table_results.md`).
     That fits the predicted change, but those tables were not analysed cell by cell,
-    so do not state the cause as a finding.
+    so the cause is not established.
 - **Why shaping does not hurt:** F = Φ(s′) − Φ(s) with Φ(terminal) = 0 telescopes over a
   hand, so it cannot change the optimal policy (Ng et al., 1999).
 
@@ -320,8 +290,8 @@ hands, so each value is about ±0.001 (`q_table_ladder*.json`, `learning_curves*
   - On 6 decks, the count tables are worse than their no-count versions at 1M hands
     (−0.0473 vs −0.0464; −0.0408 vs −0.0352).
   - At 10M they are level or still behind (−0.0458 vs −0.0458; −0.0338 vs −0.0329).
-  - They come out ahead only at 30M. These checkpoints are ±0.001, so use the final
-    evaluation in §4.1 for the precise comparison.
+  - They come out ahead only at 30M. These checkpoints are ±0.001, so the final
+    evaluation in §4.1 is the precise comparison.
   - On 1 deck, count + double is still improving between 10M and 30M, so more data
     would likely help it.
 - **Stability across seeds:**
@@ -350,9 +320,6 @@ hands, so each value is about ±0.001 (`q_table_ladder*.json`, `learning_curves*
     the data needed per state.
 
 ### 4.7 Alternative explanations we checked
-
-The rubric's top band for analysis asks for "limitations and alternative explanations".
-Material for one short paragraph:
 
 - **"The table is wrong on 12 vs 4."** It is a finite-shoe effect, not a learning error
   (§4.3):
@@ -401,7 +368,7 @@ Material for one short paragraph:
 
 ## 6. Reflections and contributions
 
-**Advice for future students (draft; edit as a team):**
+**Advice for future students:**
 
 - Evaluate on millions of hands with paired seeds. At 50k hands the 95% interval is
   about ±0.009, larger than the count effect.
@@ -409,12 +376,10 @@ Material for one short paragraph:
 - An exact solution (policy iteration) is the best tool for explaining what the
   learned table does.
 
-**Iteration and failures.** The rubric's top band asks for "strong reflection on
-successes, failures, and future improvements". So far there is no such paragraph.
-Material, to keep only where you can vouch for it:
+**Iteration and failures:**
 
-- The proposal paired Q-learning with an LLM comparison. After meeting our TA, we
-  dropped the LLM part (§1).
+- The proposal planned supervised fine-tuning (SFT) of an LLM. After meeting our TA,
+  we dropped SFT and focused on Q-learning (§1).
 - The two Kaggle datasets had no states or transitions, so we simulated hands instead
   (METHODS, "Data").
 - `Blackjack-v1` deals from an infinite deck, where the count says nothing about the
@@ -426,34 +391,27 @@ Material, to keep only where you can vouch for it:
 - An earlier README stated the −2 count deviations wrongly ("hit 13–15 vs 2–6",
   commit b715b7f). Checking against `count_deviations_1deck` corrected it (§4.2).
 
-**Contributions** (1–2 sentences each, plus a short personal reflection in each
-member's own words):
+**Contributions** (same as the table in the report; each member wrote their own
+reflection):
 
 | Member | Contribution | Personal reflection |
 |---|---|---|
-| Ziyao Zhou | Built the finite-shoe environment with the Hi-Lo count and double down, the exact model and policy-iteration baseline, the Q-learning ladder and the shared evaluation protocol. | After meeting with our TA, we narrowed the project from LLM fine-tuning to Q-learning alone. I learned that plain data and direct computation often explain a model better than an LLM can, and that chasing a harder, more complex method is not always the most cost-effective choice. |
-| Hao HUANG | Analyzed the observation-space modification by adding the Hi-Lo true count to the Q-table state. Compared ±2 and ±3 count buckets, identified count-dependent policy changes, and explained why count information helps more in smaller shoes. | I learned that adding more state information can improve decision quality, but it also increases the size of the Q-table and the amount of data needed. The count feature was most useful in one-deck Blackjack, where each observed card has a larger effect on the remaining shoe composition. |
-| Mingyu Jin | Analyzed how adding double down changed the learned policy and compared its win rate with its mean return. | I learned why win rate alone can be misleading. With six decks, doubling lowered the win rate from 43.0% to 42.9% but improved mean return by 0.0126 per hand. |
-| [Member C] | [placeholder] | [placeholder] |
-| Jinghao Liu | Reran the simulator validation with 20 million hands per policy (within 0.0003 of the exact model and Gymnasium) and retrained the 6-deck, 1-deck and bust-penalty Q-tables from the original seeds, reproducing the saved policy analysis exactly. Made the summary figure and policy maps and assembled the final report. | I learned that a result is convincing only when it reproduces from the same seeds and agrees with an exact reference; checking every number against the outputs this way caught several claims in our early notes that the data did not support. |
+| Ziyao Zhou | Built the finite-shoe environment with the Hi-Lo count and double down, the exact model and policy-iteration baseline (§3), and the shared evaluation protocol. Built the Q-learning ladder reported in the main results table. | I learned that an exact model plus direct computation explained the learned policy better than a more complex method would, and that narrowing the scope let us run controlled, reproducible comparisons (see the project evolution table). |
+| Mingyu Jin | Analyzed how double down changed the learned policy (§4.3, cells that differ from basic strategy) and compared win rate with mean return (main results table): in six decks, win rate edged down from 43.0% to 42.9% while mean return rose by 0.0126 per hand. | Once the agent can double its stake, I need to ask which hands it doubles and what those decisions earn. |
+| Yiyang Fan | Analyzed the reward experiments (§4.4, bust-penalty table and policy map), comparing bust penalties with the exact penalized solution and explaining why potential-based shaping preserves the optimal policy. | I learned that improving a proxy such as bust rate can worsen the true objective, while a theoretically safe reward change may offer little practical speedup. |
+| Hao Huang | Analyzed adding the Hi-Lo true count to the Q-table state (§4.2): compared ±2 and ±3 count buckets (bucket table), identified count-dependent policy changes (count-deviation figure), and explained why the count helps more in smaller shoes. | I learned that adding state information can improve decision quality but also enlarges the Q-table and the data needed. The count was most useful with one deck, where each observed card has a larger effect on the remaining shoe. |
+| Jinghao Liu | Reran the simulator validation at 20 million hands and retrained the policy-map Q-tables from the original seeds, which reproduced the saved results. Made the summary figure and policy maps (count deviations, learned vs basic strategy, bust penalty) and assembled the report. | I learned that a result is convincing only when it reproduces and agrees with an exact reference. |
 
-**Use of generative AI (draft; check every clause and add your own use):**
+**Use of generative AI** (same as the statement in the report):
 
-The previous draft said the experiment design and the interpretation were our own. That
-understates what AI did, so this draft says it plainly. The course policy allows AI for
-questions, hints and debugging, and says not to copy AI output verbatim (guideline,
-Logistics 2). Write the report text yourselves, make sure each member can explain their
-part, and ask the TA or Piazza if unsure (Logistics 2b).
-
-> We used Claude (Anthropic) through Claude Code throughout the project. It wrote most
-> of the code from our descriptions: the shoe environment, the Q-learning ladder, and
-> the evaluation and analysis scripts. It ran the experiments and proposed several of
-> the analyses (the exact bust-penalty solver, the infinite-deck control run, the
-> Q-value error check). It also reviewed the results and drafted the repository
-> documentation and the notes this report was written from. [Confirm: we chose the
-> question and the observation, action and reward changes to study.] [Say what each of
-> us checked or changed by hand.] We wrote this report ourselves. [Name any other AI
-> tools and what they were used for.]
+> We used Claude (via Claude Code) and OpenAI Codex throughout the project. They wrote
+> most of the code (the shoe environment, the Q-learning ladder, and the evaluation and
+> analysis scripts) and the repository documentation from our descriptions, ran the
+> experiments, and suggested some of the analyses (the exact bust-penalty solver, the
+> infinite-deck control run, the Q-value error check). We chose the research question
+> and the observation, action and reward changes to study, reviewed the code and
+> results, and checked every reported number against the frozen outputs. AI helped
+> draft the report text, and we revised it. Each member can explain the parts they own.
 
 ## 7. References (APA)
 
@@ -474,6 +432,6 @@ part, and ask the TA or Piazza if unsure (Logistics 2b).
 - Wiewiora, E. (2003). Potential-based shaping and Q-value initialization are
   equivalent. *Journal of Artificial Intelligence Research, 19*, 205–208.
 - Kaggle datasets checked in §2: *900,000 Hands of BlackJack Results* and *50 Million
-  Blackjack Hands*. [Add authors and URLs.]
+  Blackjack Hands*. Full entries (authors, years, URLs) are in the report's references.
 - Tools: Python, Gymnasium, Matplotlib (Hunter, J. D. (2007). Matplotlib: A 2D
   graphics environment. *Computing in Science & Engineering, 9*(3), 90–95.)
